@@ -24,11 +24,11 @@ source .venv/bin/activate
 Установите зависимости:
 
 ```
-python3 -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Запуск тестов
 
 ```
-pytest tests
+pytest tests -v
 ```

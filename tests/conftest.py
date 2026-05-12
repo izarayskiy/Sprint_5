@@ -8,8 +8,8 @@ from tests.locators import RegistrationLocators
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from tests.data import BASE_URL, BAD_USER_EMAIL, USER_PASSWORD
 
-BASE_URL = "https://qa-desk.education-services.ru/"
 
 @pytest.fixture
 def driver():
@@ -25,12 +25,7 @@ def user_email():
 
 
 @pytest.fixture
-def user_password():
-    return "Pass123word"
-
-
-@pytest.fixture
-def registered_driver(driver, user_email, user_password):
+def registered_driver(driver, user_email):
     """Регистрация пользователя"""
     driver.get(BASE_URL)
 
@@ -38,9 +33,9 @@ def registered_driver(driver, user_email, user_password):
     driver.find_element(*RegistrationLocators.NO_ACCOUNT_BUTTON).click()
 
     driver.find_element(*RegistrationLocators.EMAIL_INPUT).send_keys(user_email)
-    driver.find_element(*RegistrationLocators.PASSWORD_INPUT).send_keys(user_password)
+    driver.find_element(*RegistrationLocators.PASSWORD_INPUT).send_keys(USER_PASSWORD)
     driver.find_element(*RegistrationLocators.SUBMIT_PASSWORD_INPUT).send_keys(
-        user_password
+        USER_PASSWORD
     )
     driver.find_element(*RegistrationLocators.CREATE_ACCOUNT_BUTTON).click()
 
@@ -50,28 +45,26 @@ def registered_driver(driver, user_email, user_password):
     return {
         "driver": driver,
         "email": user_email,
-        "password": user_password,
+        "password": USER_PASSWORD,
     }
 
 
 @pytest.fixture
 def fail_registered_driver(driver):
     """Регистрация пользователя c email не по маске  *******@*******.***"""
-    bad_user_email = "user_email-projecthailmary.space"
-
     driver.get(BASE_URL)
 
     driver.find_element(*RegistrationLocators.LOGIN_AND_REGISTRATION_BUTTON).click()
     driver.find_element(*RegistrationLocators.NO_ACCOUNT_BUTTON).click()
 
-    driver.find_element(*RegistrationLocators.EMAIL_INPUT).send_keys(bad_user_email)
+    driver.find_element(*RegistrationLocators.EMAIL_INPUT).send_keys(BAD_USER_EMAIL)
     driver.find_element(*RegistrationLocators.CREATE_ACCOUNT_BUTTON).click()
 
     return driver
 
 
 @pytest.fixture
-def registered_driver_with_logout(driver, user_email, user_password):
+def registered_driver_with_logout(driver, user_email):
     """Зарегистрирован новый пользователь. Совершен logout"""
     driver.get(BASE_URL)
     wait = WebDriverWait(driver, 10)
@@ -80,9 +73,9 @@ def registered_driver_with_logout(driver, user_email, user_password):
     driver.find_element(*RegistrationLocators.NO_ACCOUNT_BUTTON).click()
 
     driver.find_element(*RegistrationLocators.EMAIL_INPUT).send_keys(user_email)
-    driver.find_element(*RegistrationLocators.PASSWORD_INPUT).send_keys(user_password)
+    driver.find_element(*RegistrationLocators.PASSWORD_INPUT).send_keys(USER_PASSWORD)
     driver.find_element(*RegistrationLocators.SUBMIT_PASSWORD_INPUT).send_keys(
-        user_password
+        USER_PASSWORD
     )
     driver.find_element(*RegistrationLocators.CREATE_ACCOUNT_BUTTON).click()
 
@@ -93,7 +86,7 @@ def registered_driver_with_logout(driver, user_email, user_password):
     return {
         "driver": driver,
         "email": user_email,
-        "password": user_password,
+        "password": USER_PASSWORD,
     }
 
 
